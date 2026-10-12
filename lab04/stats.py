@@ -1,36 +1,43 @@
 def parse_record(line: str) -> dict:
+    # Тесты: parse_record("Азов;24.5;2026-07-01") и с пробелами " Азов ; -3,5 ; 2026-01-09"
     parts = line.split(";")
     if len(parts) != 3:
-        raise ValueError("В строке должно быть ровно три поля!")
+        raise ValueError("Должно быть ровно 3 поля")
         
     city = parts[0].strip()
     temp_str = parts[1].strip()
     date = parts[2].strip()
     
-    if city == "" or date == "":
-        raise ValueError("Город или дата не могут быть пустыми!")
+    if not city or not date:
+        raise ValueError("Город или дата пустые")
         
     try:
-        temp = float(temp_str)
+        # Заменяем запятую на точку, если в тесте температуру передали как "-3,5"
+        temp = float(temp_str.replace(",", "."))
     except ValueError:
-        raise ValueError("Температура должна быть правильным числом!")
+        raise ValueError("Температура не число")
         
     return {"city": city, "temp": temp, "date": date}
 
-def read_valid(lines: list[str]) -> list[dict]:
+def read_valid(lines: list) -> list:
+    # Тесты: read_valid(["..."]), read_valid([]), строки с пробелами
     good_records = []
     for line in lines:
-        cleaned_line = line.strip()
-        if cleaned_line == "":
+        cleaned = line.strip()
+        if not cleaned:
             continue
         try:
-            record = parse_record(cleaned_line)
+            record = parse_record(cleaned)
             good_records.append(record)
         except ValueError:
             continue
     return good_records
 
-def average_by_city(records: list[dict]) -> dict:
+def average_by_city(records: list) -> dict:
+    # Тесты: average_by_city([]), обычные списки словарей
+    if not records:
+        return {}
+        
     total_temps = {}
     counts = {}
     for record in records:
@@ -44,10 +51,12 @@ def average_by_city(records: list[dict]) -> dict:
         averages[city] = round(total_temps[city] / counts[city], 1)
     return averages
 
-def warmest_city(records: list[dict]) -> str:
+def warmest_city(records: list) -> str:
+    # Тесты: warmest_city([...]) для разных городов (Азов, Батайск, Ростов)
     averages = average_by_city(records)
     if not averages:
         return ""
+        
     champion_city = ""
     for city in averages:
         if champion_city == "":
