@@ -1,5 +1,4 @@
 def parse_record(line: str) -> dict:
-    # Тесты: parse_record("Азов;24.5;2026-07-01") и с пробелами " Азов ; -3,5 ; 2026-01-09"
     parts = line.split(";")
     if len(parts) != 3:
         raise ValueError("Должно быть ровно 3 поля")
@@ -12,15 +11,14 @@ def parse_record(line: str) -> dict:
         raise ValueError("Город или дата пустые")
         
     try:
-        # Заменяем запятую на точку, если в тесте температуру передали как "-3,5"
-        temp = float(temp_str.replace(",", "."))
+        # Заменяем запятую на точку на случай формата "-3,5"
+        temperature = float(temp_str.replace(",", "."))
     except ValueError:
         raise ValueError("Температура не число")
         
-    return {"city": city, "temp": temp, "date": date}
+    return {"city": city, "temperature": temperature, "date": date}
 
 def read_valid(lines: list) -> list:
-    # Тесты: read_valid(["..."]), read_valid([]), строки с пробелами
     good_records = []
     for line in lines:
         cleaned = line.strip()
@@ -34,7 +32,6 @@ def read_valid(lines: list) -> list:
     return good_records
 
 def average_by_city(records: list) -> dict:
-    # Тесты: average_by_city([]), обычные списки словарей
     if not records:
         return {}
         
@@ -42,8 +39,8 @@ def average_by_city(records: list) -> dict:
     counts = {}
     for record in records:
         city = record["city"]
-        temp = record["temp"]
-        total_temps[city] = total_temps.get(city, 0.0) + temp
+        temperature = record["temperature"]
+        total_temps[city] = total_temps.get(city, 0.0) + temperature
         counts[city] = counts.get(city, 0) + 1
         
     averages = {}
@@ -52,7 +49,6 @@ def average_by_city(records: list) -> dict:
     return averages
 
 def warmest_city(records: list) -> str:
-    # Тесты: warmest_city([...]) для разных городов (Азов, Батайск, Ростов)
     averages = average_by_city(records)
     if not averages:
         return ""
