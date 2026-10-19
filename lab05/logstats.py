@@ -13,8 +13,7 @@ def parse_event(line: str) -> dict:
 def count_levels(lines) -> dict:
     counts = {"BROKEN": 0}
     for line in lines:
-        # Проверяем, если строка совсем пустая
-        if not line or not line.strip():
+               if not line or not line.strip():
             continue
         try:
             event = parse_event(line)
@@ -41,12 +40,10 @@ def top_errors(lines, n: int) -> list[list]:
 
 def format_report(counts: dict, errors: list[list]) -> str:
     report = ["Отчёт по журналу", ""]
-    # Выводим сначала все уровни кроме BROKEN по алфавиту
-    for level in sorted(counts.keys()):
+      for level in sorted(counts.keys()):
         if level != "BROKEN":
             report.append(f"{level}: {counts[level]}")
-    # BROKEN обязательно выводим в самом конце списка уровней
-    if "BROKEN" in counts:
+       if "BROKEN" in counts:
         report.append(f"BROKEN: {counts['BROKEN']}")
     report.append("")
     report.append("Частые ошибки:")
