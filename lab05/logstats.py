@@ -1,11 +1,11 @@
 def parse_event(line: str) -> dict:
-    cleaned_line = line.rstrip("\r\n")
-    parts = cleaned_line.split(" ", 2)
+    cleaned_line = line.rstrip('\r\n')
+    parts = cleaned_line.split(' ', 2)
     if len(parts) < 3:
-        raise ValueError("Ошибка строки")
+        raise ValueError("Invalid format")
     time, level, message = parts
-    if level not in {"DEBUG", "INFO", "WARNING", "ERROR"}:
-        raise ValueError("Неизвестный уровень")
+    if level not in {'DEBUG', 'INFO', 'WARNING', 'ERROR'}:
+        raise ValueError("Invalid level")
     return {"time": time, "level": level, "message": message}
 
 def count_levels(lines) -> dict:
@@ -36,11 +36,11 @@ def top_errors(lines, n: int) -> list[list]:
     return [[msg, count] for msg, count in sorted_errors[:n]]
 
 def format_report(counts: dict, errors: list[list]) -> str:
-    report = ["Отчёт по журналу", ""]
+    report = ["Report", ""]
     for level in sorted(counts.keys()):
         report.append(f"{level}: {counts[level]}")
     report.append("")
-    report.append("Частые ошибки:")
+    report.append("Errors:")
     for msg, count in errors:
         report.append(f"- {msg} - {count}")
     report.append("")
