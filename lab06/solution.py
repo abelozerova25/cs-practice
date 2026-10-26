@@ -3,13 +3,16 @@ def count_by_extension(paths: list[str]) -> dict[str, int]:
     for path in paths:
         filename = path.split("/")[-1]
 
-        if "." in filename:
-            extension = filename.split(".")[-1].lower()
+        last_dot_index = filename.rfind('.')
+        if last_dot_index > 0:
+            extension = filename[last_dot_index + 1:].lower()
         else:
-            extension = ""
-
+            extension = ''
         result[extension] = result.get(extension, 0) + 1
     return result
+
+
+
 
 
 def deepest_path(paths: list[str]) -> str:
